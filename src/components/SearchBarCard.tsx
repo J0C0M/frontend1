@@ -2,9 +2,10 @@ import React, { useState } from "react";
 
 type SearchBarProps = {
     onSearch: (query: string) => void;
+    onCancel: () => void;
 };
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onCancel }) => {
     const [searchTerm, setSearchTerm] = useState("");
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -15,18 +16,32 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         onSearch(searchTerm);
     };
 
+    const handleCancel = () => {
+        onCancel();
+    };
+
     return (
-        <div className="flex items-center gap-2 mb-6">
-            <input
-                type="text"
-                value={searchTerm}
-                onChange={handleInputChange}
-                placeholder="Search for a cryptocurrency..."
-                className="p-2 border rounded-md w-full shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
-            />
+            <div className="flex items-center gap-2  mb-6">
+                <div className="flex items-center shadow-lg w-1/2">
+                    <input
+                        type="text"
+                        value={searchTerm}
+                        onChange={handleInputChange}
+                        placeholder="Search for a cryptocurrency..."
+                        onFocus={(e) => e.target.classList.add("placeholder-transparent")}
+                        onBlur={(e) => e.target.classList.remove("placeholder-transparent")}
+                        className="p-2 bg-[#282740] w-full focus:outline-none"
+                    />
+                    <button
+                        onClick={handleCancel}
+                        className="bg-[#282740] text-zinc-300 px-4 py-2 hover:bg-[#362339]"
+                    >
+                        Cancel
+                    </button>
+                </div>
             <button
                 onClick={handleSearch}
-                className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600"
+                className="bg-[#100d53] text-zinc-300 px-4 py-2 shadow-md transition hover:bg-[#370d53]"
             >
                 Search
             </button>

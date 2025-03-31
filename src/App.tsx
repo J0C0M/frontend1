@@ -42,12 +42,12 @@ const App: React.FC = () => {
 
     return (
         <div className="min-h-screen p-6">
-            <h1 className="text-3xl font-bold text-white text-center mb-6">Cryptocurrency Prices</h1>
-            <SearchBar onSearch={handleSearch} />
+            <h1 className="text-3xl font-bold text-white mb-6">Cryptocurrency Prices</h1>
+            <SearchBar onSearch={handleSearch} onCancel={() => setFilteredData(cryptoData)} />
             {loading ? (
                 <p className="text-center">Loading...</p>
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="flex flex-col gap-4 ">
                     {filteredData.map((crypto) => (
                         <CryptoCard
                             key={crypto.id}
