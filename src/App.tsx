@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getCryptoData } from "./utility/api";
 import CryptoCard from "./components/CryptoCard";
 import SearchBar from "./components/SearchBarCard";
+import PageSwitch from "./components/PageSwitchCard.tsx";
 
 interface Crypto {
     id: string;
@@ -15,6 +16,8 @@ const App: React.FC = () => {
     const [cryptoData, setCryptoData] = useState<Crypto[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [filteredData, setFilteredData] = useState<Crypto[]>([]);
+    const [currentIndex, setCurrentIndex] = useState<number>(0);
+    const itemsPerPage = 5;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -38,17 +41,18 @@ const App: React.FC = () => {
             crypto.name.toLowerCase().includes(lowerCaseQuery)
         );
         setFilteredData(filtered);
+        setCurrentIndex(0);
     };
 
     return (
         <div className="min-h-screen p-6">
-            <h1 className="text-3xl font-bold text-white mb-6">Cryptocurrency Prices</h1>
-            <SearchBar onSearch={handleSearch} onCancel={() => setFilteredData(cryptoData)} />
+            <h1 className="text-3xl font-bold text-zinc-200 mb-6">Cryptocurrency Prices</h1>
+            <SearchBar onSearch={handleSearch} onCancel={() => { setFilteredData(cryptoData); setCurrentIndex(0); }} />
             {loading ? (
                 <p className="text-center">Loading...</p>
             ) : (
-                <div className="flex flex-col gap-4 ">
-                    {filteredData.map((crypto) => (
+                <div className="flex flex-col gap-4">
+                    {filteredData.slice(currentIndex, currentIndex + itemsPerPage).map((crypto) => (
                         <CryptoCard
                             key={crypto.id}
                             name={crypto.name}
@@ -59,6 +63,12 @@ const App: React.FC = () => {
                     ))}
                 </div>
             )}
+            <PageSwitch
+                currentIndex={currentIndex}
+                setCurrentIndex={setCurrentIndex}
+                totalItems={filteredData.length}
+                itemsPerPage={itemsPerPage}
+            />
         </div>
     );
 };
