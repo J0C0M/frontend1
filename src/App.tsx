@@ -3,6 +3,8 @@ import { getCryptoData } from "./utility/api";
 import CryptoCard from "./components/CryptoCard";
 import SearchBar from "./components/SearchBarCard";
 import PageSwitch from "./components/PageSwitchCard.tsx";
+import DonutCard from "./components/DonutCard.tsx";
+
 
 interface Crypto {
     id: string;
@@ -46,6 +48,7 @@ const App: React.FC = () => {
 
     return (
         <div className="min-h-screen p-6">
+            <DonutCard />
             <h1 className="text-3xl font-bold text-zinc-200 mb-6">Cryptocurrency Prices</h1>
             <SearchBar onSearch={handleSearch} onCancel={() => { setFilteredData(cryptoData); setCurrentIndex(0); }} />
             {loading ? (
