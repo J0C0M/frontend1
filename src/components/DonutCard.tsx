@@ -6,8 +6,7 @@ import {
     Tooltip,
     Legend
 } from "chart.js";
-import { getCryptoData } from "./utility/api";
-
+import { getCryptoData } from "../utility/api"; // Updated import path
 
 // Register necessary components for Chart.js v4
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -18,21 +17,18 @@ const DoughnutChart: React.FC = () => {
     useEffect(() => {
         const fetchCryptoData = async () => {
             try {
-                const response = await fetch(
-                    "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false"
-                );
-                const data = await response.json();
+                const data = await getCryptoData(); // Use the imported function
 
                 if (data && Array.isArray(data)) {
                     setChartData({
-                        labels: data.map((coin) => coin.name),
                         datasets: [{
-                            label: 'My First Dataset',
-                            data: data.map((coin) => coin.market_cap),
+                            label: 'Market Cap',
+                            data: data.slice(0, 10).map((coin) => coin.market_cap),
                             backgroundColor: [
                                 'rgb(255, 99, 132)',
                                 'rgb(54, 162, 235)',
-                                'rgb(255, 205, 86)'
+                                'rgb(153, 102, 255)',
+                                'rgb(255, 159, 64)',
                             ],
                             hoverOffset: 4
                         }]
@@ -52,7 +48,7 @@ const DoughnutChart: React.FC = () => {
             {chartData ? (
                 <Doughnut data={chartData} />
             ) : (
-                <p className="text-center text-zinc200">Loading Chart...</p>
+                <p className="text-center text-zinc-200">Loading Chart...</p>
             )}
         </div>
     );
