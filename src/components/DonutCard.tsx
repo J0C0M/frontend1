@@ -6,29 +6,44 @@ import {
     Tooltip,
     Legend
 } from "chart.js";
-import { getCryptoData } from "../utility/api"; // Updated import path
+import { getCryptoData } from "../utility/api";
 
-// Register necessary components for Chart.js v4
+// Register necessary components for Chart.js
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const DoughnutChart: React.FC = () => {
+interface DonutCardProps {
+    refreshKey?: number;
+}
+
+const DoughnutChart: React.FC<DonutCardProps> = ({ refreshKey = 0 }) => {
     const [chartData, setChartData] = useState<any>(null);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const fetchCryptoData = async () => {
+            setLoading(true);
             try {
-                const data = await getCryptoData(); // Use the imported function
+                const data = await getCryptoData();
 
                 if (data && Array.isArray(data)) {
+                    // Get top 10 crypto coins
+                    const topCoins = data.slice(0, 10);
+
                     setChartData({
+                        labels: topCoins.map(coin => coin.name), // Add labels for tooltips
                         datasets: [{
-                            label: 'Market Cap',
-                            data: data.slice(0, 10).map((coin) => coin.market_cap),
+                            data: topCoins.map(coin => coin.market_cap),
                             backgroundColor: [
                                 'rgb(255, 99, 132)',
                                 'rgb(54, 162, 235)',
                                 'rgb(153, 102, 255)',
                                 'rgb(255, 159, 64)',
+                                'rgb(75, 192, 192)',
+                                'rgb(255, 205, 86)',
+                                'rgb(201, 203, 207)',
+                                'rgb(100, 149, 237)',
+                                'rgb(144, 238, 144)',
+                                'rgb(255, 182, 193)'
                             ],
                             hoverOffset: 4
                         }]
@@ -36,19 +51,33 @@ const DoughnutChart: React.FC = () => {
                 }
             } catch (error) {
                 console.error("Error fetching crypto data:", error);
+            } finally {
+                setLoading(false);
             }
         };
 
         fetchCryptoData();
-    }, []);
+    }, [refreshKey]);
 
     return (
-        <div className="w-96 mx-auto mt-6 bg-[#282740] p-4 rounded-lg">
-            <h2 className="text-zinc-200 text-center text-xl mb-4">Top 10 Crypto Market Cap</h2>
-            {chartData ? (
-                <Doughnut data={chartData} />
+        <div className="w-96 mx-auto mt-6 bg-[#282740] p-4 shadow-lg">
+            <h2 className="text-2xl font-bold text-zinc-200 mb-6 text-center">Top 10 Crypto Market Cap</h2>
+            {loading ? (
+                <p className="text-center text-zinc-200">Loading chart...</p>
+            ) : chartData ? (
+                <Doughnut
+                    data={chartData}
+                    options={{
+                        plugins: {
+                            legend: {
+                                display: false
+                                // hide the coin visibilty disable buttons
+                            }
+                        }
+                    }}
+                />
             ) : (
-                <p className="text-center text-zinc-200">Loading Chart...</p>
+                <p className="text-center text-zinc-200">No data available</p>
             )}
         </div>
     );
