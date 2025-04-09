@@ -34,16 +34,11 @@ const DoughnutChart: React.FC<DonutCardProps> = ({ refreshKey = 0 }) => {
                         datasets: [{
                             data: topCoins.map(coin => coin.market_cap),
                             backgroundColor: [
-                                'rgb(255, 99, 132)',
-                                'rgb(54, 162, 235)',
-                                'rgb(153, 102, 255)',
                                 'rgb(255, 159, 64)',
-                                'rgb(75, 192, 192)',
-                                'rgb(255, 205, 86)',
-                                'rgb(201, 203, 207)',
-                                'rgb(100, 149, 237)',
+                                'rgb(255, 99, 132)',
                                 'rgb(144, 238, 144)',
-                                'rgb(255, 182, 193)'
+                                'rgb(54, 162, 235)',
+                                'rgb(75, 192, 192)',
                             ],
                             hoverOffset: 4
                         }]

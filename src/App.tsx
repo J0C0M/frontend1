@@ -59,7 +59,7 @@ const App: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col p-6">
+        <div className="min-h-screen flex flex-col items-start p-6">
             <div className="py-6">
                 <DonutCard />
             </div>
