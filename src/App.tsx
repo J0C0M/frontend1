@@ -59,9 +59,11 @@ const App: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col items-start p-6">
-            <div className="py-6">
-                <DonutCard />
+        <div className="min-h-screen p-6">
+            <div className="flex items-start">
+                <div className="py-6">
+                    <DonutCard />
+                </div>
             </div>
             <div className="flex gap-6 items-center mb-6">
                 <h1 className="text-3xl font-bold text-zinc-200">Cryptocurrency Prices</h1>
