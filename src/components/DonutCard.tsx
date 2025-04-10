@@ -9,7 +9,11 @@ import {
 import { getCryptoData } from "../utility/api";
 
 // Register necessary components for Chart.js
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(
+    ArcElement,
+    Tooltip,
+    Legend
+);
 
 interface DonutCardProps {
     refreshKey?: number;
@@ -55,7 +59,7 @@ const DoughnutChart: React.FC<DonutCardProps> = ({ refreshKey = 0 }) => {
     }, [refreshKey]);
 
     return (
-        <div className="w-96 h-[445px] mx-auto mt-6 bg-[#282740] p-4 shadow-lg">
+        <div className="w-96 h-[445px] mx-auto bg-[#282740] p-4 shadow-lg">
             <h2 className="text-2xl font-bold text-zinc-200 mb-6 text-center">Top 10 Crypto Market Cap</h2>
             {loading ? (
                 <p className="text-center text-zinc-200">Loading chart...</p>

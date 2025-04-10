@@ -4,7 +4,9 @@ import CryptoCard from "./components/CryptoCard";
 import SearchBar from "./components/SearchBarCard";
 import PageSwitch from "./components/PageSwitchCard.tsx";
 import DonutCard from "./components/DonutCard.tsx";
-import RefreshButton from "./components/Refresh.tsx";
+import RefreshButton from "./components/RefreshComponent.tsx";
+import CryptoLine from "./components/LineChartComponent.tsx";
+
 
 interface Crypto {
     id: string;
@@ -60,6 +62,9 @@ const App: React.FC = () => {
 
     return (
         <div className="min-h-screen p-6">
+            <div className="py-6">
+                <CryptoLine />
+            </div>
             <div className="flex items-start">
                 <div className="py-6">
                     <DonutCard />
