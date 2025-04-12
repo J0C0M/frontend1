@@ -170,7 +170,7 @@ const CryptoLineCharts: React.FC = () => {
                     };
 
                     return (
-                        <div key={crypto.id} className="bg-[#282740] p-4 rounded-lg shadow-lg">
+                        <div key={crypto.id} className=" p-4 rounded-lg shadow-lg">
                             <div className="flex items-center justify-between mb-3">
                                 <div>
                                     <h3 className="text-lg font-medium text-zinc-100">{crypto.name}</h3>
