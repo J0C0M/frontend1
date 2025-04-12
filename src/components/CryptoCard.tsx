@@ -38,7 +38,7 @@ const CryptoCard: React.FC<CryptoCardProps> =
                 className="ml-auto mr-2 px-3 py-1 rounded-md"
             >
                 {isFavorite ? (
-                    <span className="text-yellow-400 text-xl">★</span>
+                    <span className="text-yellow-500 text-xl">★</span>
                 ) : (
                     <span className="text-zinc-400 text-xl">☆</span>
                 )}

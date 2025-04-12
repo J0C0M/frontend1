@@ -26,7 +26,7 @@ const PageSwitch: React.FC<PageSwitchProps> = ({ currentIndex, setCurrentIndex, 
     return (
         <div className="flex justify-center mt-4 gap-4 items-center">
             <button onClick={prevPage} disabled={currentIndex === 0}
-                    className="px-4 py-2 bg-[#282740] shadow-lg text-white hover:bg-[#100d53]
+                    className="px-4 p-2 bg-[#282740] shadow-lg text-white hover:bg-[#100d53]
                                 transition disabled:opacity-50">←</button>
             <span className="text-zinc-300">Page {currentPage} of {totalPages}</span>
             <button onClick={nextPage} disabled={currentIndex + itemsPerPage >= totalItems}

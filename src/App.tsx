@@ -25,6 +25,7 @@ const App: React.FC = () => {
     const [favorites, setFavorites] = useState<string[]>([]);
     const itemsPerPage = 5;
 
+    // Load favorites from localStorage on app start
     useEffect(() => {
         const savedFavorites = localStorage.getItem("cryptoFavorites");
         if (savedFavorites) {
@@ -32,6 +33,7 @@ const App: React.FC = () => {
         }
     }, []);
 
+    // Save favorites to localStorage when they change
     useEffect(() => {
         localStorage.setItem("cryptoFavorites", JSON.stringify(favorites));
     }, [favorites]);
@@ -84,20 +86,20 @@ const App: React.FC = () => {
 
     return (
         <div className="min-h-screen p-6">
-            <div className="py-6">
+            <div className="pt-6">
                 <CryptoLine />
             </div>
-            <div className="flex items-start">
-                <div className="py-6">
+            <div className="flex flex-wrap gap-6 mb-6 ">
+                <div className="py-6 ">
                     <DonutCard />
                 </div>
-                {favorites.length > 0 && (
+                <div className="py-6 w-[66%]">
                     <FavoriteCoins
                         favorites={favorites}
                         cryptoData={cryptoData}
                         onToggleFavorite={handleToggleFavorite}
                     />
-                )}
+                </div>
             </div>
             <div className="flex gap-6 items-center mb-6">
                 <h1 className="text-3xl font-bold text-zinc-200">Cryptocurrency Prices</h1>
