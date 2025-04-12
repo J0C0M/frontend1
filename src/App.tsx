@@ -2,11 +2,11 @@ import React, { useEffect, useState, useCallback } from "react";
 import { getCryptoData } from "./utility/api";
 import CryptoCard from "./components/CryptoCard";
 import SearchBar from "./components/SearchBarCard";
-import PageSwitch from "./components/PageSwitchCard.tsx";
-import DonutCard from "./components/DonutCard.tsx";
-import RefreshButton from "./components/RefreshComponent.tsx";
-import CryptoLine from "./components/LineChartComponent.tsx";
-
+import PageSwitch from "./components/PageSwitchCard";
+import DonutCard from "./components/DonutCard";
+import RefreshButton from "./components/RefreshComponent";
+import CryptoLine from "./components/LineChartComponent";
+import FavoriteCoins from "./components/FavoriteCoinsComponent.tsx";
 
 interface Crypto {
     id: string;
@@ -22,7 +22,19 @@ const App: React.FC = () => {
     const [refreshing, setRefreshing] = useState<boolean>(false);
     const [filteredData, setFilteredData] = useState<Crypto[]>([]);
     const [currentIndex, setCurrentIndex] = useState<number>(0);
+    const [favorites, setFavorites] = useState<string[]>([]);
     const itemsPerPage = 5;
+
+    useEffect(() => {
+        const savedFavorites = localStorage.getItem("cryptoFavorites");
+        if (savedFavorites) {
+            setFavorites(JSON.parse(savedFavorites));
+        }
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem("cryptoFavorites", JSON.stringify(favorites));
+    }, [favorites]);
 
     const fetchData = useCallback(async (isRefresh = false) => {
         try {
@@ -60,6 +72,16 @@ const App: React.FC = () => {
         fetchData(true);
     };
 
+    const handleToggleFavorite = (id: string) => {
+        setFavorites(prevFavorites => {
+            if (prevFavorites.includes(id)) {
+                return prevFavorites.filter(favId => favId !== id);
+            } else {
+                return [...prevFavorites, id];
+            }
+        });
+    };
+
     return (
         <div className="min-h-screen p-6">
             <div className="py-6">
@@ -69,6 +91,13 @@ const App: React.FC = () => {
                 <div className="py-6">
                     <DonutCard />
                 </div>
+                {favorites.length > 0 && (
+                    <FavoriteCoins
+                        favorites={favorites}
+                        cryptoData={cryptoData}
+                        onToggleFavorite={handleToggleFavorite}
+                    />
+                )}
             </div>
             <div className="flex gap-6 items-center mb-6">
                 <h1 className="text-3xl font-bold text-zinc-200">Cryptocurrency Prices</h1>
@@ -82,10 +111,13 @@ const App: React.FC = () => {
                     {filteredData.slice(currentIndex, currentIndex + itemsPerPage).map((crypto) => (
                         <CryptoCard
                             key={crypto.id}
+                            id={crypto.id}
                             name={crypto.name}
                             image={crypto.image}
                             price={crypto.current_price}
                             marketCap={crypto.market_cap}
+                            isFavorite={favorites.includes(crypto.id)}
+                            onToggleFavorite={handleToggleFavorite}
                         />
                     ))}
                     {filteredData.length === 0 && (
