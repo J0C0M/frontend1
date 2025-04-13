@@ -7,6 +7,7 @@ import DonutCard from "./components/DonutCard";
 import RefreshButton from "./components/RefreshComponent";
 import CryptoLine from "./components/LineChartComponent";
 import FavoriteCoins from "./components/FavoriteCoinsComponent.tsx";
+import CryptoDetail from "./components/CryptoCoinDetailComponent.tsx";
 
 interface Crypto {
     id: string;
@@ -23,6 +24,7 @@ const App: React.FC = () => {
     const [filteredData, setFilteredData] = useState<Crypto[]>([]);
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [favorites, setFavorites] = useState<string[]>([]);
+    const [selectedCryptoId, setSelectedCryptoId] = useState<string | null>(null);
     const itemsPerPage = 5;
 
     // Load favorites from localStorage on app start
@@ -84,6 +86,27 @@ const App: React.FC = () => {
         });
     };
 
+    const handleCryptoSelect = (id: string) => {
+        setSelectedCryptoId(id);
+    };
+
+    const handleBackToDashboard = () => {
+        setSelectedCryptoId(null);
+    };
+
+    // If a crypto is selected, show the detail view
+    if (selectedCryptoId) {
+        return (
+            <CryptoDetail
+                cryptoId={selectedCryptoId}
+                onBack={handleBackToDashboard}
+                onToggleFavorite={handleToggleFavorite}
+                isFavorite={favorites.includes(selectedCryptoId)}
+            />
+        );
+    }
+
+    // Otherwise show the dashboard
     return (
         <div className="min-h-screen p-6">
             <div className="pt-6">
@@ -98,6 +121,7 @@ const App: React.FC = () => {
                         favorites={favorites}
                         cryptoData={cryptoData}
                         onToggleFavorite={handleToggleFavorite}
+                        onCryptoSelect={handleCryptoSelect}
                     />
                 </div>
             </div>
@@ -120,6 +144,7 @@ const App: React.FC = () => {
                             marketCap={crypto.market_cap}
                             isFavorite={favorites.includes(crypto.id)}
                             onToggleFavorite={handleToggleFavorite}
+                            onCryptoSelect={handleCryptoSelect}
                         />
                     ))}
                     {filteredData.length === 0 && (

@@ -34,7 +34,7 @@ const DoughnutChart: React.FC<DonutCardProps> = ({ refreshKey = 0 }) => {
                     const topCoins = data.slice(0, 10);
 
                     setChartData({
-                        labels: topCoins.map(coin => coin.name), // Add labels for tooltips
+                        labels: topCoins.map(coin => coin.name), // Voeg labels toe voor tooltips
                         datasets: [{
                             data: topCoins.map(coin => coin.market_cap),
                             backgroundColor: [
