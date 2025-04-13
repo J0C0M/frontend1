@@ -5,6 +5,10 @@ interface RefreshButtonProps {
     isLoading: boolean;
 }
 
+/**
+ * Button component that handles refreshing data
+ * Displays loading spinner when refresh is in progress
+ */
 const RefreshButton: React.FC<RefreshButtonProps> = ({ onRefresh, isLoading }) => {
     return (
         <button
@@ -14,6 +18,7 @@ const RefreshButton: React.FC<RefreshButtonProps> = ({ onRefresh, isLoading }) =
                      hover:bg-[#100d53] transition disabled:opacity-50"
         >
             {isLoading ? (
+                // Display loading spinner animation when isLoading is true
                 <div>
                     <svg className="animate-spin h-5 w-5 text-zinc-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -22,6 +27,7 @@ const RefreshButton: React.FC<RefreshButtonProps> = ({ onRefresh, isLoading }) =
                     <span>Refreshing...</span>
                 </div>
             ) : (
+                // Display standard button text when not loading
                 <div>
                     <span>Refresh</span>
                 </div>

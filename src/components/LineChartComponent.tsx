@@ -2,15 +2,23 @@ import React, { useEffect, useState } from "react";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { getCryptoData } from "../utility/api";
-import PageSwitch from "./PageSwitchCard";
+import PageSwitch from "./PageSwitchComponent.tsx";
 
-// Register Chart.js components
+// Register Chart.js components needed for line charts
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
+/**
+ * Component that displays line charts for cryptocurrency price history
+ * Includes pagination to show multiple charts
+ */
 const CryptoLineCharts: React.FC = () => {
+    // State to store cryptocurrency data fetched from API
     const [cryptoData, setCryptoData] = useState<any[]>([]);
+    // Loading state to show loading indicator
     const [loading, setLoading] = useState<boolean>(true);
+    // State to track current page index for pagination
     const [currentIndex, setCurrentIndex] = useState<number>(0);
+    // Number of charts to display per page
     const itemsPerPage = 4;
 
     // Colors for charts - simplified color palette
@@ -21,7 +29,11 @@ const CryptoLineCharts: React.FC = () => {
         { border: "rgb(255,0,125)", background: "rgba(236, 72, 153, 0.2)" }  // pink
     ];
 
+    // Fetch crypto data when component mounts
     useEffect(() => {
+        /**
+         * Fetches cryptocurrency data and generates mock price history
+         */
         async function loadData() {
             try {
                 setLoading(true);
@@ -47,7 +59,6 @@ const CryptoLineCharts: React.FC = () => {
         loadData();
     }, []);
 
-    // Create deterministic price history based on crypto ID and current price
     const generatePriceHistory = (basePrice: number, cryptoId: string) => {
         const priceHistory = [];
         const days = 14;
@@ -89,7 +100,7 @@ const CryptoLineCharts: React.FC = () => {
         return priceHistory;
     };
 
-    // Chart options with improved tooltips
+    // Chart.js configuration options with improved tooltips
     const options = {
         responsive: true,
         maintainAspectRatio: false,
@@ -142,6 +153,7 @@ const CryptoLineCharts: React.FC = () => {
         }
     };
 
+    // Show loading indicator when data is being fetched
     if (loading) {
         return <div className="text-center py-8 text-zinc-200">Loading charts...</div>;
     }
@@ -192,6 +204,7 @@ const CryptoLineCharts: React.FC = () => {
                 })}
             </div>
 
+            {/* Display pagination controls if there are more items than can fit on a page */}
             {cryptoData.length > itemsPerPage && (
                 <div className="mt-6">
                     <PageSwitch

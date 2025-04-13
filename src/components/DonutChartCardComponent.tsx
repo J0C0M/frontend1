@@ -15,14 +15,21 @@ ChartJS.register(
     Legend
 );
 
+// Props interface for the DonutCard component
 interface DonutCardProps {
-    refreshKey?: number;
+    refreshKey?: number; // Optional prop to trigger refresh when changed
 }
 
+/**
+ * Component that displays a doughnut chart showing market cap distribution
+ * of the top 10 cryptocurrencies
+ */
 const DoughnutChart: React.FC<DonutCardProps> = ({ refreshKey = 0 }) => {
+    // State for the chart data and loading status
     const [chartData, setChartData] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
+    // Fetch cryptocurrency data when component mounts or refreshKey changes
     useEffect(() => {
         const fetchCryptoData = async () => {
             setLoading(true);
@@ -30,11 +37,12 @@ const DoughnutChart: React.FC<DonutCardProps> = ({ refreshKey = 0 }) => {
                 const data = await getCryptoData();
 
                 if (data && Array.isArray(data)) {
-                    // Get top 10 crypto coins
+                    // Get top 10 crypto coins for the chart
                     const topCoins = data.slice(0, 10);
 
+                    // Format data for the doughnut chart
                     setChartData({
-                        labels: topCoins.map(coin => coin.name), // Voeg labels toe voor tooltips
+                        labels: topCoins.map(coin => coin.name), // Add labels for tooltips
                         datasets: [{
                             data: topCoins.map(coin => coin.market_cap),
                             backgroundColor: [
@@ -56,7 +64,7 @@ const DoughnutChart: React.FC<DonutCardProps> = ({ refreshKey = 0 }) => {
         };
 
         fetchCryptoData();
-    }, [refreshKey]);
+    }, [refreshKey]); // Re-fetch when refreshKey changes
 
     return (
         <div className="w-96 h-[445px] mx-auto p-4 shadow-lg">
@@ -70,7 +78,7 @@ const DoughnutChart: React.FC<DonutCardProps> = ({ refreshKey = 0 }) => {
                         plugins: {
                             legend: {
                                 display: false
-                                // hide the coin visibilty disable buttons
+                                // hide the coin visibility disable buttons
                             }
                         }
                     }}

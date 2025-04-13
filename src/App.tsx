@@ -1,14 +1,15 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { getCryptoData } from "./utility/api";
-import CryptoCard from "./components/CryptoCard";
-import SearchBar from "./components/SearchBarCard";
-import PageSwitch from "./components/PageSwitchCard";
-import DonutCard from "./components/DonutCard";
+import CryptoCardComponent from "./components/CryptoCardComponent.tsx";
+import SearchBar from "./components/SearchBarComponent.tsx";
+import PageSwitch from "./components/PageSwitchComponent.tsx";
+import DonutCard from "./components/DonutChartCardComponent.tsx";
 import RefreshButton from "./components/RefreshComponent";
 import CryptoLine from "./components/LineChartComponent";
 import FavoriteCoins from "./components/FavoriteCoinsComponent.tsx";
 import CryptoDetail from "./components/CryptoCoinDetailComponent.tsx";
 
+// Define the shape of cryptocurrency data
 interface Crypto {
     id: string;
     name: string;
@@ -18,14 +19,15 @@ interface Crypto {
 }
 
 const App: React.FC = () => {
-    const [cryptoData, setCryptoData] = useState<Crypto[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [refreshing, setRefreshing] = useState<boolean>(false);
-    const [filteredData, setFilteredData] = useState<Crypto[]>([]);
-    const [currentIndex, setCurrentIndex] = useState<number>(0);
-    const [favorites, setFavorites] = useState<string[]>([]);
-    const [selectedCryptoId, setSelectedCryptoId] = useState<string | null>(null);
-    const itemsPerPage = 5;
+    // State management for the application
+    const [cryptoData, setCryptoData] = useState<Crypto[]>([]); // Store all crypto data
+    const [loading, setLoading] = useState<boolean>(true); // Track initial loading state
+    const [refreshing, setRefreshing] = useState<boolean>(false); // Track refresh state
+    const [filteredData, setFilteredData] = useState<Crypto[]>([]); // Store filtered crypto data
+    const [currentIndex, setCurrentIndex] = useState<number>(0); // Current page index
+    const [favorites, setFavorites] = useState<string[]>([]); // Store favorite crypto IDs
+    const [selectedCryptoId, setSelectedCryptoId] = useState<string | null>(null); // Track selected crypto for detail view
+    const itemsPerPage = 5; // Number of cryptocurrencies to display per page
 
     // Load favorites from localStorage on app start
     useEffect(() => {
@@ -40,8 +42,10 @@ const App: React.FC = () => {
         localStorage.setItem("cryptoFavorites", JSON.stringify(favorites));
     }, [favorites]);
 
+    // Fetch cryptocurrency data from API
     const fetchData = useCallback(async (isRefresh = false) => {
         try {
+            // Set appropriate loading state based on whether it's initial load or refresh
             if (isRefresh) {
                 setRefreshing(true);
             } else {
@@ -50,32 +54,37 @@ const App: React.FC = () => {
 
             const data = await getCryptoData();
             setCryptoData(data);
-            setFilteredData(data);
+            setFilteredData(data); // Initialize filtered data with all data
         } catch {
             console.error("Failed to fetch crypto data");
         } finally {
+            // Reset loading states when done
             setLoading(false);
             setRefreshing(false);
         }
     }, []);
 
+    // Fetch data on component mount
     useEffect(() => {
         fetchData();
     }, [fetchData]);
 
+    // Handle search functionality
     const handleSearch = (query: string) => {
         const lowerCaseQuery = query.toLowerCase();
         const filtered = cryptoData.filter((crypto) =>
             crypto.name.toLowerCase().includes(lowerCaseQuery)
         );
         setFilteredData(filtered);
-        setCurrentIndex(0);
+        setCurrentIndex(0); // Reset to first page of results
     };
 
+    // Handle refresh button click
     const handleRefresh = () => {
         fetchData(true);
     };
 
+    // Toggle a cryptocurrency as favorite/unfavorite
     const handleToggleFavorite = (id: string) => {
         setFavorites(prevFavorites => {
             if (prevFavorites.includes(id)) {
@@ -86,10 +95,12 @@ const App: React.FC = () => {
         });
     };
 
+    // Handle cryptocurrency selection for detail view
     const handleCryptoSelect = (id: string) => {
         setSelectedCryptoId(id);
     };
 
+    // Navigate back to dashboard from detail view
     const handleBackToDashboard = () => {
         setSelectedCryptoId(null);
     };
@@ -135,7 +146,7 @@ const App: React.FC = () => {
             ) : (
                 <div className="flex flex-col gap-4 mt-6">
                     {filteredData.slice(currentIndex, currentIndex + itemsPerPage).map((crypto) => (
-                        <CryptoCard
+                        <CryptoCardComponent
                             key={crypto.id}
                             id={crypto.id}
                             name={crypto.name}

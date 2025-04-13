@@ -1,30 +1,37 @@
 import React from "react";
 
+// Define props interface for the CryptoCardComponent component
 interface CryptoCardProps {
-    id: string;
-    name: string;
-    image: string;
-    price: number;
-    marketCap: number;
-    isFavorite: boolean;
-    onToggleFavorite: (id: string) => void;
-    onCryptoSelect: (id: string) => void;
+    id: string; // Unique identifier for the cryptocurrency
+    name: string; // Name of the cryptocurrency
+    image: string; // URL to the cryptocurrency logo image
+    price: number; // Current price in USD
+    marketCap: number; // Market capitalization in USD
+    isFavorite: boolean; // Whether this cryptocurrency is in favorites
+    onToggleFavorite: (id: string) => void; // Function to toggle favorite status
+    onCryptoSelect: (id: string) => void; // Function to select this crypto for detailed view
 }
 
-const CryptoCard: React.FC<CryptoCardProps> = ({
-                                                   id,
-                                                   name,
-                                                   image,
-                                                   price,
-                                                   marketCap,
-                                                   isFavorite,
-                                                   onToggleFavorite,
-                                                   onCryptoSelect
-                                               }) => {
+/**
+ * Component that displays a single cryptocurrency as a card with basic information
+ */
+const CryptoCardComponent: React.FC<CryptoCardProps> = (
+    {
+        id,
+        name,
+        image,
+        price,
+        marketCap,
+        isFavorite,
+        onToggleFavorite,
+        onCryptoSelect
+    }) => {
+    // Handle click on the card to view cryptocurrency details
     const handleCardClick = () => {
         onCryptoSelect(id);
     };
 
+    // Handle click on the favorite button, preventing the card click
     const handleFavoriteClick = (e: React.MouseEvent) => {
         e.stopPropagation(); // Prevent the card click from triggering
         onToggleFavorite(id);
@@ -60,4 +67,4 @@ const CryptoCard: React.FC<CryptoCardProps> = ({
     );
 };
 
-export default CryptoCard;
+export default CryptoCardComponent;

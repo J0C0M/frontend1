@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { getCryptoDetail } from "../utility/api";
 
+// Props for the CryptoDetail component
 interface CryptoDetailProps {
-    cryptoId: string;
-    onBack: () => void;
-    onToggleFavorite: (id: string) => void;
-    isFavorite: boolean;
+    cryptoId: string; // ID of the cryptocurrency to display
+    onBack: () => void; // Function to go back to the dashboard
+    onToggleFavorite: (id: string) => void; // Function to toggle favorite status
+    isFavorite: boolean; // Whether this cryptocurrency is in favorites
 }
 
+// Interface for the detailed cryptocurrency data
 interface CryptoDetailData {
     id: string;
     name: string;
@@ -38,16 +40,22 @@ interface CryptoDetailData {
     last_updated: string;
 }
 
-const CryptoDetail: React.FC<CryptoDetailProps> = ({
-                                                       cryptoId,
-                                                       onBack,
-                                                       onToggleFavorite,
-                                                       isFavorite
-                                                   }) => {
+/**
+ * Component for displaying detailed information about a specific cryptocurrency
+ */
+const CryptoDetail: React.FC<CryptoDetailProps> = (
+    {
+        cryptoId,
+        onBack,
+        onToggleFavorite,
+        isFavorite
+    }) => {
+    // State for the detailed cryptocurrency data
     const [cryptoData, setCryptoData] = useState<CryptoDetailData | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+    // Fetch detailed information about the cryptocurrency when the component mounts
     useEffect(() => {
         const fetchCryptoDetail = async () => {
             try {
@@ -65,13 +73,15 @@ const CryptoDetail: React.FC<CryptoDetailProps> = ({
         fetchCryptoDetail();
     }, [cryptoId]);
 
+    // Handle toggling the favorite status of this cryptocurrency
     const handleToggleFavorite = () => {
         onToggleFavorite(cryptoId);
     };
 
+    // Show loading state
     if (loading) {
         return (
-            <div className="min-h-screen p-6 bg-[#242339] text-zinc-200">
+            <div className="min-h-screen p-6 bg-[#242339] shadow-lg text-zinc-200">
                 <div className="container mx-auto">
                     <div className="flex justify-between items-center mb-8">
                         <h1 className="text-3xl font-bold">Loading Details...</h1>
@@ -90,6 +100,7 @@ const CryptoDetail: React.FC<CryptoDetailProps> = ({
         );
     }
 
+    // Show error state
     if (error || !cryptoData) {
         return (
             <div className="min-h-screen p-6 bg-[#242339] text-zinc-200">
@@ -99,7 +110,7 @@ const CryptoDetail: React.FC<CryptoDetailProps> = ({
                         <button
                             onClick={onBack}
                             className="bg-[#282740] hover:bg-[#100d53]
-                                       text-zinc-200 px-4 py-2 ">
+                                       text-zinc-200 px-4 py-2 shadow-lg">
                             Back to Dashboard
                         </button>
                     </div>
@@ -111,9 +122,11 @@ const CryptoDetail: React.FC<CryptoDetailProps> = ({
         );
     }
 
+    // Main component render with detailed cryptocurrency information
     return (
-        <div className="min-h-screen p-6 bg-[#1a1a2e] text-zinc-200">
+        <div className="min-h-screen p-6  text-zinc-200">
             <div className="container mx-auto">
+                {/* Header with cryptocurrency name, symbol, and action buttons */}
                 <div className="flex justify-between items-center mb-8">
                     <div className="flex items-center gap-4">
                         <img
@@ -127,7 +140,7 @@ const CryptoDetail: React.FC<CryptoDetailProps> = ({
                         <button
                             onClick={handleToggleFavorite}
                             className="bg-[#282740] hover:bg-[#100d53] text-zinc-200
-                                         px-4 py-2 flex items-center gap-2">
+                                         px-4 py-2 flex items-center gap-2 shadow-lg">
                             {isFavorite ? (
                                 <>
                                     <span className="text-yellow-400 text-xl">★</span>
@@ -142,14 +155,17 @@ const CryptoDetail: React.FC<CryptoDetailProps> = ({
                         </button>
                         <button
                             onClick={onBack}
-                            className="bg-[#282740] hover:bg-[#100d53] text-zinc-200 px-4 py-2">
+                            className="bg-[#282740] hover:bg-[#100d53] shadow-lg
+                                       text-zinc-200 px-4 py-2">
                             Back to Dashboard
                         </button>
                     </div>
                 </div>
 
+                {/* Market data and information panels */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                    <div className="bg-[#282740] p-6 shadow-lg col-span-2">
+                    {/* Market data panel */}
+                    <div className="p-6 shadow-lg col-span-2">
                         <h2 className="text-2xl font-bold mb-4">Market Data</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
@@ -178,6 +194,7 @@ const CryptoDetail: React.FC<CryptoDetailProps> = ({
                             </div>
                         </div>
 
+                        {/* Price change section */}
                         <h2 className="text-2xl font-bold mt-8 mb-4">Price Change</h2>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div className={`p-3 ${cryptoData.market_data.price_change_percentage_24h >= 0 ? 'bg-green-900/30' : 'bg-red-900/30'}`}>
@@ -201,7 +218,8 @@ const CryptoDetail: React.FC<CryptoDetailProps> = ({
                         </div>
                     </div>
 
-                    <div className="bg-[#282740] p-6 shadow-lg">
+                    {/* Information panel */}
+                    <div className="p-6 shadow-lg">
                         <h2 className="text-2xl font-bold mb-4">Information</h2>
                         <div className="mb-4">
                             <h3 className="text-lg text-zinc-400">CoinGecko Rank</h3>
@@ -216,8 +234,8 @@ const CryptoDetail: React.FC<CryptoDetailProps> = ({
                         <div className="mb-4">
                             <h3 className="text-lg text-zinc-400">Sentiment</h3>
                             <div className="flex gap-4">
-                                <p className="text-green-400">👍 {cryptoData.sentiment_votes_up_percentage.toFixed(1)}%</p>
-                                <p className="text-red-400">👎 {cryptoData.sentiment_votes_down_percentage.toFixed(1)}%</p>
+                                <p className="text-green-400"> {cryptoData.sentiment_votes_up_percentage.toFixed(1)}%</p>
+                                <p className="text-red-400"> {cryptoData.sentiment_votes_down_percentage.toFixed(1)}%</p>
                             </div>
                         </div>
                         <div className="mb-4">
@@ -248,7 +266,8 @@ const CryptoDetail: React.FC<CryptoDetailProps> = ({
                     </div>
                 </div>
 
-                <div className="bg-[#282740] p-6 shadow-lg mb-8">
+                {/* Description section */}
+                <div className="p-6 shadow-lg mb-8">
                     <h2 className="text-2xl font-bold mb-4">About {cryptoData.name}</h2>
                     <div
                         className="text-zinc-300 leading-relaxed"

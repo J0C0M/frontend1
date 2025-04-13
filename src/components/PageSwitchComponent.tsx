@@ -1,5 +1,12 @@
 import React from "react";
 
+/**
+ * Props interface for the PageSwitch component
+ * @property {number} currentIndex - The starting index of currently displayed items
+ * @property {React.Dispatch<React.SetStateAction<number>>} setCurrentIndex - State setter function for the currentIndex
+ * @property {number} totalItems - Total number of items in the collection
+ * @property {number} itemsPerPage - Number of items to display per page
+ */
 interface PageSwitchProps {
     currentIndex: number;
     setCurrentIndex: React.Dispatch<React.SetStateAction<number>>;
@@ -7,16 +14,28 @@ interface PageSwitchProps {
     itemsPerPage: number;
 }
 
+/**
+ * Component that handles pagination controls
+ * Displays current page number and navigation buttons
+ */
 const PageSwitch: React.FC<PageSwitchProps> = ({ currentIndex, setCurrentIndex, totalItems, itemsPerPage }) => {
+    // Calculate total number of pages based on items and page size
     const totalPages = Math.ceil(totalItems / itemsPerPage);
+    // Calculate current page number (1-indexed for display)
     const currentPage = totalPages > 0 ? Math.floor(currentIndex / itemsPerPage) + 1 : 0;
 
+    /**
+     * Go to the next page if not on the last page
+     */
     const nextPage = () => {
         if (currentIndex + itemsPerPage < totalItems) {
             setCurrentIndex(currentIndex + itemsPerPage);
         }
     };
 
+    /**
+     * Go to the previous page if not on the first page
+     */
     const prevPage = () => {
         if (currentIndex - itemsPerPage >= 0) {
             setCurrentIndex(currentIndex - itemsPerPage);

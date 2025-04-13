@@ -5,17 +5,31 @@ type SearchBarProps = {
     onCancel: () => void;
 };
 
+/**
+ * SearchBar component for filtering cryptocurrency data
+ * Manages search input state and handles search/cancel operations
+ */
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onCancel }) => {
+    // State to track the current search input value
     const [searchTerm, setSearchTerm] = useState("");
 
+    /**
+     * Updates the searchTerm state when input value changes
+     */
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
     };
 
+    /**
+     * Triggers the search with the current search term
+     */
     const handleSearch = () => {
         onSearch(searchTerm);
     };
 
+    /**
+     * Clears the search input and calls the onCancel callback
+     */
     const handleCancel = () => {
         setSearchTerm(""); // Clear the input field
         onCancel();
