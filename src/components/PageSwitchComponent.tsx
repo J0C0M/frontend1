@@ -1,12 +1,6 @@
 import React from "react";
 
-/**
- * Props interface for the PageSwitch component
- * @property {number} currentIndex - The starting index of currently displayed items
- * @property {React.Dispatch<React.SetStateAction<number>>} setCurrentIndex - State setter function for the currentIndex
- * @property {number} totalItems - Total number of items in the collection
- * @property {number} itemsPerPage - Number of items to display per page
- */
+
 interface PageSwitchProps {
     currentIndex: number;
     setCurrentIndex: React.Dispatch<React.SetStateAction<number>>;
